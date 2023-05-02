@@ -5,16 +5,13 @@ import  CryptoJS  from "crypto-js";
 import pkg from 'validator'
 const {isEmail, isMobilePhone} = pkg
 
-const secretKey = "mysecretkey";
-
-const JWT_SECRET = "secret";
 
 function encrypt(data) {
-  return CryptoJS.AES.encrypt(data, secretKey).toString();
+  return CryptoJS.AES.encrypt(data, process.env.SECRET_KEY).toString();
 }
 
 function decrypt(data) {
-  const bytes = CryptoJS.AES.decrypt(data, secretKey);
+  const bytes = CryptoJS.AES.decrypt(data, process.env.SECRET_KEY);
   return bytes.toString(CryptoJS.enc.Utf8);
 }
 
@@ -97,7 +94,7 @@ export const login = async (req, res) => {
         email: email,
         mobileNumber: decrypt(user.mobileNumber),
       },
-      JWT_SECRET
+      process.env.JWT_SECRET
     );
 
     res.json({ message: "Successfully logged in", token });
