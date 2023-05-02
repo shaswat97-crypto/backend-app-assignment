@@ -12,4 +12,4 @@ router
   .post("/signup", signup)
   .post("/resetpassword", resetpassword)
   .post("/login", login)
-  .put("/updateuser/:id", update)
+  .put("/updateuser/:id", update);
