@@ -31,7 +31,7 @@ export const signup = async (req, res) => {
 
     const newUser = await User.create({
       fullName: encrypt(fullName),
-      email: encrypt(email),
+      email: email,
       mobileNumber: encrypt(mobileNumber.toString()),
       password: hashedPass,
     });
@@ -50,7 +50,7 @@ export const resetpassword = async (req, res) => {
     if (!oldPass || !email || !newPass)
       res.status(404).json({ message: "Please provide all details" });
 
-    const user = await User.findOne({ email: encrypt(email) });
+    const user = await User.findOne({ email: email });
 
     const isCorrectPass = await bcrypt.compare(oldPass, user.password);
 
@@ -76,14 +76,15 @@ export const login = async (req, res) => {
     if (!email || !password)
       res.status(404).json({ message: "Please provide all details" });
 
-    const user = await User.findOne({ email: encrypt(email) });
+      // console.log(encrypt(email));
+    const user = await User.findOne({ email: email });
 
     if (!user) {
       res.status(404).json({ message: "User not found" });
     }
 
     const isCorrectPass = await bcrypt.compare(
-      req.body.password,
+      password,
       user.password
     );
     if (!isCorrectPass) {
@@ -111,7 +112,7 @@ export const update = async (req, res) => {
 
   const data = {};
   if (fullName) data.fullName = encrypt(fullName);
-  if (email) data.email = encrypt(email);
+  if (email) data.email = email;
   if (mobileNumber) data.mobileNumber = mobileNumber;
 
   try {
